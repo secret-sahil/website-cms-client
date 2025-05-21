@@ -1,6 +1,6 @@
 import { LoginForm } from "@/components/login-form";
 import { GalleryVerticalEnd } from "lucide-react";
-
+import { env } from "@/env.mjs";
 export default function Home() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
@@ -9,7 +9,7 @@ export default function Home() {
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <GalleryVerticalEnd className="size-4" />
           </div>
-          Factroo
+          {env.NEXT_PUBLIC_APP_NAME}
         </a>
         <LoginForm />
       </div>

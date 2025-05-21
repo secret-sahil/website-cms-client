@@ -9,6 +9,7 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { useLogin } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
+import { env } from "@/env.mjs";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const usernameRef = React.useRef<HTMLInputElement>(null);
@@ -78,7 +79,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         </CardContent>
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        &copy; 2021 Factroo. All rights reserved.
+        &copy; 2021 {env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
       </div>
     </div>
   );
