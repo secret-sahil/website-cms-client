@@ -1,27 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  ArrowDownFromLine,
-  ArrowRightLeft,
-  ArrowUpFromLine,
-  BadgeIndianRupee,
-  Building,
-  GalleryVerticalEnd,
-  Hammer,
-  House,
-  Layers,
-  Layers2,
-  ListCheck,
-  Package,
-  Package2,
-  Ruler,
-  Scale,
-  Shield,
-  Store,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { Rss, GalleryVerticalEnd, ChartBarStacked, House, Store, Wallet } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
 import {
@@ -41,112 +21,32 @@ import { useGetUser } from "@/hooks/useUser";
 
 // This is sample data.
 const data = {
-  user: {
-    name: "Admin",
-    email: "admin@factroo.com",
-    avatar: "/avatars/admin.jpg",
-  },
-  dataMaster: [
+  content: [
     {
-      name: "Divisions",
-      url: "/divisions",
-      icon: Building,
+      name: "Blog",
+      url: "/blog",
+      icon: Rss,
     },
     {
-      name: "Categories",
-      url: "/item-categories",
-      icon: Layers,
-    },
-    {
-      name: "Sub Categories",
-      url: "/item-subcategories",
-      icon: Layers2,
-    },
-    {
-      name: "Units of Measure",
-      url: "/units",
-      icon: Ruler,
-    },
-    {
-      name: "Unit Conversions",
-      url: "/unit-conversions",
-      icon: Scale,
-    },
-    {
-      name: "Items",
-      url: "/items",
-      icon: Package,
-    },
-    {
-      name: "Parties",
-      url: "/parties",
-      icon: Users,
-    },
-    {
-      name: "Storages",
-      url: "/storages",
-      icon: Package2,
-    },
-    {
-      name: "Bill of materials (BOM)",
-      url: "/boms",
-      icon: ListCheck,
+      name: "Blog Categories",
+      url: "/blog-categories",
+      icon: ChartBarStacked,
     },
   ],
 
-  actions: [
+  sales: [
     {
       name: "Inventory",
       url: "/inventory",
       icon: Store,
     },
-    {
-      name: "Purchase",
-      url: "/purchase",
-      icon: Wallet,
-    },
-    {
-      name: "Material Issue",
-      url: "/material-issue",
-      icon: ArrowRightLeft,
-    },
-    {
-      name: "Production",
-      url: "/production",
-      icon: Hammer,
-    },
-    {
-      name: "Sale",
-      url: "/sales",
-      icon: BadgeIndianRupee,
-    },
   ],
 
-  jobOrders: [
+  hr: [
     {
       name: "Purchase Order",
       url: "/purchase-order",
       icon: Wallet,
-    },
-    {
-      name: "Sales Order",
-      url: "/salesOrders",
-      icon: ArrowRightLeft,
-    },
-    {
-      name: "Job Work (Issue)",
-      url: "/job-work-issue",
-      icon: ArrowUpFromLine,
-    },
-    {
-      name: "Job Work (Received)",
-      url: "/job-work-received",
-      icon: ArrowDownFromLine,
-    },
-    {
-      name: "Admin",
-      url: "/admin",
-      icon: Shield,
     },
   ],
 };
@@ -185,9 +85,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <NavMain title="Data Master" projects={data.dataMaster} />
-        <NavMain title="Items Actions" projects={data.actions} />
-        <NavMain title="Job Orders" projects={data.jobOrders} />
+        <NavMain title="Content" projects={data.content} />
+        <NavMain title="Sales" projects={data.sales} />
+        <NavMain title="Human Resources" projects={data.hr} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user?.result.data} />
