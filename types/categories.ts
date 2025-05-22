@@ -10,7 +10,6 @@ export const createCategorySchema = object({
     .trim()
     .toLowerCase()
     .nonempty(),
-  divisionId: number({ required_error: "Division is required." }),
 });
 
 export const updateCategorySchema = object({
@@ -25,7 +24,6 @@ export const updateCategorySchema = object({
     .toLowerCase()
     .nonempty()
     .optional(),
-  divisionId: number().optional(),
 }).partial();
 
 export const getCategoriesSchema = object({

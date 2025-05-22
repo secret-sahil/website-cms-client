@@ -12,7 +12,7 @@ export default function Page() {
       breadcrumbs={[
         {
           label: "Categories",
-          href: "/item-categories",
+          href: "/blog-categories",
         },
       ]}
     >

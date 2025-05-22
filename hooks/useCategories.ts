@@ -16,7 +16,7 @@ export const useCreateCategory = () => {
   return useMutation<ApiResponse<any>, ApiErrorResponse, createCategoryInput>({
     mutationFn: Categories.create,
     onSuccess: () => {
-      router.push("/item-categories");
+      router.push("/blog-categories");
       Notify.success("Created successfully.");
     },
     onError: (error) => {
