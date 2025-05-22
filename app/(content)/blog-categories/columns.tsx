@@ -110,9 +110,7 @@ export const columns: ColumnDef<CategoriesResponse>[] = [
     accessorKey: "division.name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Division" />,
     cell: ({ row }) => (
-      <span className="bg-green-500/80 text-white px-1 rounded-md">
-        {row.original.division.name}
-      </span>
+      <span className="bg-green-500/80 text-white px-1 rounded-md">{row.original.isPublished}</span>
     ),
   },
   {

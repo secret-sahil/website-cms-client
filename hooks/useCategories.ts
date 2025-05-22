@@ -59,7 +59,7 @@ export const useUpdateCategory = () => {
 export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ApiResponse<any>, ApiErrorResponse, number>({
+  return useMutation<ApiResponse<any>, ApiErrorResponse, string>({
     mutationFn: Categories.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });

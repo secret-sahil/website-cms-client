@@ -18,6 +18,7 @@ import {
 import { NavMain } from "./nav-main";
 import Link from "next/link";
 import { useGetUser } from "@/hooks/useUser";
+import { env } from "@/env.mjs";
 
 // This is sample data.
 const data = {
@@ -64,8 +65,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <GalleryVerticalEnd className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Factroo</span>
-                  <span className="">Admin</span>
+                  <span className="font-semibold">{env.NEXT_PUBLIC_APP_NAME}</span>
+                  <span className="capitalize border border-border rounded-md px-1 w-fit">
+                    {user?.result.data.role}
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>

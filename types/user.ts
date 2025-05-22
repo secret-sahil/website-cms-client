@@ -3,6 +3,7 @@ export interface UsersResponse {
   firstName: string;
   lastName: string;
   username: string;
+  role: "sales" | "content" | "hr" | "admin";
   photo?: string;
   mobile?: string;
   createdAt: string;
