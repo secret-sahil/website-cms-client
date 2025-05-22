@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Ban, Clock, Loader2, MoreHorizontal, Pencil } from "lucide-react";
+import { Ban, Loader2, MoreHorizontal, Pencil } from "lucide-react";
 import { CategoriesResponse } from "@/types/categories";
 import { useDeleteCategory } from "@/hooks/useCategories";
 import Link from "next/link";
@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
+import { cn } from "@/lib/utils";
 
 const Cell = ({ data }: { data: CategoriesResponse }) => {
   const { mutate, isPending } = useDeleteCategory();
@@ -49,7 +50,7 @@ const Cell = ({ data }: { data: CategoriesResponse }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <Link href={`/item-categories/update/${data.id}`} className="flex items-center">
+            <Link href={`/blog-categories/update/${data.id}`} className="flex items-center">
               <Pencil className="mr-2 h-4 w-4" />
               Update
             </Link>
@@ -99,18 +100,27 @@ const Cell = ({ data }: { data: CategoriesResponse }) => {
 
 export const columns: ColumnDef<CategoriesResponse>[] = [
   {
-    accessorKey: "id",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
+    id: "index",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="#" />,
+    cell: ({ row }) => <>{row.index + 1}</>,
   },
   {
     accessorKey: "name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+    header: "Name",
+    cell: ({ row }) => <span className="capitalize">{row.getValue("name")}</span>,
   },
   {
-    accessorKey: "division.name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Division" />,
+    accessorKey: "isPublished",
+    header: "Published",
     cell: ({ row }) => (
-      <span className="bg-green-500/80 text-white px-1 rounded-md">{row.original.isPublished}</span>
+      <span
+        className={cn(
+          "text-white px-1 rounded-md",
+          row.original.isPublished ? "bg-green-500" : "bg-red-500"
+        )}
+      >
+        {row.original.isPublished ? "Yes" : "No"}
+      </span>
     ),
   },
   {
@@ -126,11 +136,8 @@ export const columns: ColumnDef<CategoriesResponse>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
     cell: ({ row }) => (
       <span className="flex flex-row items-center gap-x-1">
-        {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}{" "}
-        <span className="flex flex-row items-center gap-x-1 w-min bg-blue-500/80 text-white px-1 rounded-md">
-          <Clock className="h-3 w-3" />
-          {format(new Date(row.getValue("createdAt")), "HH:mm:ss")}
-        </span>
+        {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}/
+        {format(new Date(row.getValue("createdAt")), "hh:mm a")}
       </span>
     ),
   },
@@ -139,11 +146,8 @@ export const columns: ColumnDef<CategoriesResponse>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" />,
     cell: ({ row }) => (
       <span className="flex flex-row items-center gap-x-1">
-        {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}{" "}
-        <span className="flex flex-row items-center gap-x-1 w-min bg-blue-500/80 text-white px-1 rounded-md">
-          <Clock className="h-3 w-3" />
-          {format(new Date(row.getValue("createdAt")), "HH:mm:ss")}
-        </span>
+        {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}/
+        {format(new Date(row.getValue("createdAt")), "hh:mm a")}
       </span>
     ),
   },

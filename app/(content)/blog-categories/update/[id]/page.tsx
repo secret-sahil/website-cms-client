@@ -10,11 +10,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       breadcrumbs={[
         {
           label: "Categories",
-          href: "/item-categories",
+          href: "/blog-categories",
         },
         {
           label: "Update Category",
-          href: "/item-categories/create",
+          href: "/blog-categories/create",
         },
       ]}
     >

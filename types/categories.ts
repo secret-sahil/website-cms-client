@@ -16,19 +16,18 @@ export const updateCategorySchema = object({
     .max(30, { message: "Name is too long." })
     .trim()
     .toLowerCase()
-    .nonempty()
-    .optional(),
+    .nonempty(),
 }).partial();
 
 export const getCategoriesSchema = object({
-  query: object({
-    divisionId: number(),
-  }).partial(),
-});
+  search: string(),
+  page: number(),
+  limit: number(),
+}).partial();
 
 export type createCategoryInput = TypeOf<typeof createCategorySchema>;
 export type updateCategoryInput = TypeOf<typeof updateCategorySchema>;
-export type getCategoryInput = TypeOf<typeof getCategoriesSchema>["query"];
+export type getCategoryInput = TypeOf<typeof getCategoriesSchema>;
 
 export interface CategoriesResponse {
   id: string;

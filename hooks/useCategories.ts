@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ApiErrorResponse, ApiResponse } from "@/types/common";
+import { ApiErrorResponse, ApiResponse, ApiResponseWithPagination } from "@/types/common";
 import Notify from "@/lib/notification";
 import {
   createCategoryInput,
@@ -26,7 +26,7 @@ export const useCreateCategory = () => {
 };
 
 export const useGetAllCategories = (data?: getCategoryInput) => {
-  return useQuery<ApiResponse<CategoriesResponse[]>, ApiErrorResponse>({
+  return useQuery<ApiResponseWithPagination<CategoriesResponse[]>, ApiErrorResponse>({
     queryFn: () => Categories.read(data),
     queryKey: ["categories"],
   });
@@ -47,7 +47,7 @@ export const useUpdateCategory = () => {
     mutationFn: Categories.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
-      router.push("/item-categories");
+      router.push("/blog-categories");
       Notify.success("Updated successfully.");
     },
     onError: (error) => {
