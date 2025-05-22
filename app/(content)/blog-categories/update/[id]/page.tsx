@@ -4,7 +4,7 @@ import Form from "./form";
 import React from "react";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const id = Number(React.use(params).id);
+  const id = React.use(params).id;
   return (
     <AdminLayout
       breadcrumbs={[

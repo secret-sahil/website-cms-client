@@ -32,7 +32,7 @@ export const useGetAllCategories = (data?: getCategoryInput) => {
   });
 };
 
-export const useGetCategoryById = (id: number) => {
+export const useGetCategoryById = (id: string) => {
   return useQuery<ApiResponse<CategoriesResponse>, ApiErrorResponse>({
     queryFn: () => Categories.readOne(id),
     queryKey: ["category", id],

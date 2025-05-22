@@ -7,37 +7,23 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useGetCategoryById, useUpdateCategory } from "@/hooks/useCategories";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { useGetAllDivisions } from "@/hooks/useDivisions";
+import { Loader2 } from "lucide-react";
 
-export default function DataFrom({ id }: { id: number }) {
+export default function DataFrom({ id }: { id: string }) {
   const { mutate, isPending } = useUpdateCategory();
   const { data } = useGetCategoryById(id);
-  const { data: divisions } = useGetAllDivisions();
 
   const form = useForm<z.infer<typeof updateCategorySchema>>({
     resolver: zodResolver(updateCategorySchema),
     values: data?.result.data,
     defaultValues: {
       name: "",
-      divisionId: undefined,
     },
   });
 
@@ -67,67 +53,6 @@ export default function DataFrom({ id }: { id: number }) {
                   }}
                 />
               </FormControl>
-              <FormDescription>This is the name of your factory category.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="divisionId"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Division</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-full justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? divisions?.result.data.find((division) => division.id === field.value)
-                            ?.name
-                        : "Select division"}
-                      <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="min-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search division..." className="h-9" />
-                    <CommandList>
-                      <CommandEmpty>No division found.</CommandEmpty>
-                      <CommandGroup>
-                        {divisions?.result.data.map((division) => (
-                          <CommandItem
-                            value={division.name}
-                            key={division.id}
-                            onSelect={() => {
-                              form.setValue("divisionId", division.id);
-                            }}
-                          >
-                            {division.name}
-                            <Check
-                              className={cn(
-                                "ml-auto",
-                                division.id === field.value ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                This is the division that will be used in the dashboard.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
