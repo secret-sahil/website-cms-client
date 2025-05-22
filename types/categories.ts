@@ -1,4 +1,4 @@
-import { number, object, string, TypeOf } from "zod";
+import { boolean, number, object, string, TypeOf } from "zod";
 
 export const createCategorySchema = object({
   name: string({ required_error: "Name is required." })
@@ -9,10 +9,11 @@ export const createCategorySchema = object({
 
 export const updateCategorySchema = object({
   id: string({ required_error: "Id is required." }),
-  name: string({ required_error: "Name is required." })
+  name: string()
     .min(3, { message: "Name is too short." })
     .max(30, { message: "Name is too long." })
     .trim(),
+  isPublished: boolean(),
 }).partial();
 
 export const getCategoriesSchema = object({
