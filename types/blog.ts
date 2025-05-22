@@ -5,23 +5,30 @@ export const createBlogSchema = object({
     .min(3, { message: "Job title is too short." })
     .max(250, { message: "Job title is too long." })
     .trim(),
-  description: string({ required_error: "Job description is required." }),
-  content: string({ required_error: "Job content is required." }),
-  featuredImageId: string(),
-  categoryIds: string({ required_error: "Cate  gory is required." }).array(),
-  tags: string({ required_error: "Tag(s) are required." }).array(),
+  description: string({ required_error: "Job description is required." })
+    .min(30, { message: "Description is too short." })
+    .nonempty(),
+  content: string({ required_error: "Job content is required." })
+    .min(200, { message: "Content is too short." })
+    .nonempty(),
+  featuredImageId: string({ required_error: "Featured image is required." }).url(),
+  categoryIds: string({ required_error: "Category is required." })
+    .uuid({ message: "Invalid category id format." })
+    .array()
+    .min(1, { message: "At least one category is required." }),
+  tags: string({ required_error: "Tag(s) are required." }).array().nonempty(),
 });
 
 export const updateBlogSchema = object({
-  id: string({ required_error: "Id is required." }).uuid("Invalid id format."),
+  id: string({ required_error: "Id is required." }).uuid("Invalid id format.").uuid(),
   title: string()
     .min(3, { message: "Job title is too short." })
     .max(250, { message: "Job title is too long." })
     .trim(),
-  description: string(),
-  content: string(),
-  featuredImageId: string(),
-  categoryIds: string().array(),
+  description: string().min(30, { message: "Description is too short." }).nonempty(),
+  content: string().min(200, { message: "Content is too short." }).nonempty(),
+  featuredImageId: string().url(),
+  categoryIds: string().uuid().array().min(1, { message: "At least one category is required." }),
   tags: string().array(),
   isPublished: boolean(),
 }).partial();

@@ -8,7 +8,7 @@ export const createCategorySchema = object({
 });
 
 export const updateCategorySchema = object({
-  id: string({ required_error: "Id is required." }),
+  id: string({ required_error: "Id is required." }).uuid(),
   name: string()
     .min(3, { message: "Name is too short." })
     .max(30, { message: "Name is too long." })

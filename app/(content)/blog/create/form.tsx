@@ -1,30 +1,37 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { createCategorySchema } from "@/types/categories";
+import { createBlogSchema } from "@/types/blog";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useCreateCategory } from "@/hooks/useCategories";
+import { useCreateBlog } from "@/hooks/useBlog";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function DataFrom() {
-  const { mutate, isPending } = useCreateCategory();
-  const form = useForm<z.infer<typeof createCategorySchema>>({
-    resolver: zodResolver(createCategorySchema),
+  const { mutate, isPending } = useCreateBlog();
+  const form = useForm<z.infer<typeof createBlogSchema>>({
+    resolver: zodResolver(createBlogSchema),
     defaultValues: {
-      name: "",
+      title: "",
+      description: "",
+      content: "",
+      featuredImageId: "",
+      categoryIds: [],
+      tags: [],
     },
   });
 
-  function onSubmit(values: z.infer<typeof createCategorySchema>) {
+  function onSubmit(values: z.infer<typeof createBlogSchema>) {
     mutate(values);
   }
 
@@ -33,13 +40,28 @@ export default function DataFrom() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category Name</FormLabel>
+              <FormLabel>Blog Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter category name" {...field} />
+                <Input placeholder="Enter blog title" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Blog Description</FormLabel>
+              <FormControl>
+                <Textarea rows={3} placeholder="Enter blog title" {...field} />
+              </FormControl>
+              <FormDescription>Used in seo meta description aslo.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
