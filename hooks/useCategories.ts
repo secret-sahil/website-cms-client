@@ -28,7 +28,7 @@ export const useCreateCategory = () => {
 export const useGetAllCategories = (data?: getCategoryInput) => {
   return useQuery<ApiResponseWithPagination<CategoriesResponse[]>, ApiErrorResponse>({
     queryFn: () => Categories.read(data),
-    queryKey: ["categories"],
+    queryKey: ["categories", data?.page, data?.limit, data?.search],
   });
 };
 
