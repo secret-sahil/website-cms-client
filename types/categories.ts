@@ -4,9 +4,7 @@ export const createCategorySchema = object({
   name: string({ required_error: "Name is required." })
     .min(3, { message: "Name is too short." })
     .max(30, { message: "Name is too long." })
-    .trim()
-    .toLowerCase()
-    .nonempty(),
+    .trim(),
 });
 
 export const updateCategorySchema = object({
@@ -14,9 +12,7 @@ export const updateCategorySchema = object({
   name: string({ required_error: "Name is required." })
     .min(3, { message: "Name is too short." })
     .max(30, { message: "Name is too long." })
-    .trim()
-    .toLowerCase()
-    .nonempty(),
+    .trim(),
 }).partial();
 
 export const getCategoriesSchema = object({

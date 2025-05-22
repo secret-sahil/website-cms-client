@@ -4,8 +4,7 @@ export const createBlogSchema = object({
   title: string({ required_error: "Job title is required." })
     .min(3, { message: "Job title is too short." })
     .max(250, { message: "Job title is too long." })
-    .trim()
-    .toLowerCase(),
+    .trim(),
   description: string({ required_error: "Job description is required." }),
   content: string({ required_error: "Job content is required." }),
   featuredImageId: string(),
@@ -18,8 +17,7 @@ export const updateBlogSchema = object({
   title: string()
     .min(3, { message: "Job title is too short." })
     .max(250, { message: "Job title is too long." })
-    .trim()
-    .toLowerCase(),
+    .trim(),
   description: string(),
   content: string(),
   featuredImageId: string(),
