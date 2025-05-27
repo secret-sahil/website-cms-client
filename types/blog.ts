@@ -49,6 +49,7 @@ export interface BlogResponse {
   id: string;
   slug: string;
   title: string;
+  content: string;
   description: string;
   featuredImageId: string;
   tags: string[];

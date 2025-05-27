@@ -9,11 +9,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     <AdminLayout
       breadcrumbs={[
         {
-          label: "Categories",
+          label: "Blog",
           href: "/blog",
         },
         {
-          label: "Update Category",
+          label: "Update Blog",
           href: "/blog/create",
         },
       ]}
