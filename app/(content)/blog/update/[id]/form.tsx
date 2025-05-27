@@ -108,6 +108,7 @@ export default function DataFrom({ id }: { id: string }) {
                         <AlertDialogCancel className="text-muted-foreground">Esc</AlertDialogCancel>
                       </AlertDialogHeader>
 
+                      {/* Replace this with your actual image selector */}
                       <div className="grid grid-cols-4 gap-4 p-4">
                         {media?.result.data.data.map((img) => (
                           <button
@@ -231,6 +232,18 @@ export default function DataFrom({ id }: { id: string }) {
                     type="text"
                     placeholder="Add tag and press Enter"
                     className="flex-1 bg-transparent outline-none text-sm"
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      const paste = e.clipboardData.getData("text");
+                      const values = paste
+                        .split(",")
+                        .map((v) => v.trim())
+                        .filter((v) => v && !field.value?.includes(v));
+                      if (values.length > 0) {
+                        form.setValue("tags", [...(field.value ?? []), ...values]);
+                      }
+                      e.currentTarget.value = "";
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === ",") {
                         e.preventDefault();

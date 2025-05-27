@@ -25,17 +25,28 @@ import {
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useCreateBlog } from "@/hooks/useBlog";
-import { Check, ChevronsUpDown, Loader2, X } from "lucide-react";
+import { ArrowRightLeft, Check, ChevronsUpDown, Loader2, X } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { useGetAllCategories } from "@/hooks/useCategories";
+import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useGetAllMedia } from "@/hooks/useMedia";
 
 const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
 export default function DataFrom() {
   const { data: categories } = useGetAllCategories();
+  const { data: media } = useGetAllMedia({ type: JSON.stringify(["image"]) });
   const { mutate, isPending } = useCreateBlog();
   const form = useForm<z.infer<typeof createBlogSchema>>({
     resolver: zodResolver(createBlogSchema),
@@ -64,6 +75,56 @@ export default function DataFrom() {
               <FormLabel>Blog Title</FormLabel>
               <FormControl>
                 <Input placeholder="Enter blog title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="featuredImageId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Featured Image</FormLabel>
+              <FormControl>
+                <div className="flex gap-2 items-center">
+                  <Input placeholder="Select an image" readOnly={true} {...field} />
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline">
+                        Select Image <ArrowRightLeft className="ml-2" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="max-w-7xl">
+                      <AlertDialogHeader className="flex flex-row justify-between items-center">
+                        <AlertDialogTitle>Select required from below batches.</AlertDialogTitle>
+                        <AlertDialogCancel className="text-muted-foreground">Esc</AlertDialogCancel>
+                      </AlertDialogHeader>
+
+                      {/* Replace this with your actual image selector */}
+                      <div className="grid grid-cols-4 gap-4 p-4">
+                        {media?.result.data.data.map((img) => (
+                          <button
+                            key={img.id}
+                            onClick={() => {
+                              field.onChange(img.id);
+                            }}
+                            className="border p-2 hover:bg-accent"
+                          >
+                            <Image
+                              src={img.url}
+                              alt={img.id}
+                              width={150}
+                              height={150}
+                              className="w-full h-auto object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -163,6 +224,18 @@ export default function DataFrom() {
                     type="text"
                     placeholder="Add tag and press Enter"
                     className="flex-1 bg-transparent outline-none text-sm"
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      const paste = e.clipboardData.getData("text");
+                      const values = paste
+                        .split(",")
+                        .map((v) => v.trim())
+                        .filter((v) => v && !field.value.includes(v));
+                      if (values.length > 0) {
+                        form.setValue("tags", [...field.value, ...values]);
+                      }
+                      e.currentTarget.value = "";
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === ",") {
                         e.preventDefault();

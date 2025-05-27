@@ -11,7 +11,7 @@ export const createBlogSchema = object({
   content: string({ required_error: "Job content is required." })
     .min(200, { message: "Content is too short." })
     .nonempty(),
-  featuredImageId: string({ required_error: "Featured image is required." }).url(),
+  featuredImageId: string({ required_error: "Featured image is required." }).uuid(),
   categoryIds: string({ required_error: "Category is required." })
     .uuid({ message: "Invalid category id format." })
     .array()
