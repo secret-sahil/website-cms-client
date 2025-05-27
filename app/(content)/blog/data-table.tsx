@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           )}
         </div>
         <div className="space-x-2">
-          <ColumnDropdown table={table} storageKey={"category"} />
+          <ColumnDropdown table={table} storageKey={"blog"} />
           <Link className="ml-auto" href="/blog/create">
             <Button>Create Blog</Button>
           </Link>

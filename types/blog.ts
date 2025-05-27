@@ -16,7 +16,9 @@ export const createBlogSchema = object({
     .uuid({ message: "Invalid category id format." })
     .array()
     .min(1, { message: "At least one category is required." }),
-  tags: string({ required_error: "Tag(s) are required." }).array().nonempty(),
+  tags: string({ required_error: "Tag(s) are required." })
+    .array()
+    .nonempty({ message: "At least one tag is required." }),
 });
 
 export const updateBlogSchema = object({
@@ -45,11 +47,38 @@ export type getBlogInput = TypeOf<typeof getBlogSchema>;
 
 export interface BlogResponse {
   id: string;
-  name: string;
   slug: string;
-  isPublished: boolean;
+  title: string;
+  description: string;
+  featuredImageId: string;
+  tags: string[];
+  authorId: string;
+  isPublished: false;
+  isFeatured: false;
+  isDeleted: false;
   createdBy: string;
   updatedBy: string;
   createdAt: string;
   updatedAt: string;
+  featuredImage: {
+    id: string;
+    url: string;
+    type: "image";
+  };
+  author: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    photo: null | string;
+  };
+  categories: [
+    {
+      category: {
+        id: string;
+        name: string;
+        slug: string;
+      };
+    },
+  ];
 }

@@ -14,8 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Ban, Check, Loader2, MoreHorizontal, Pencil, X } from "lucide-react";
-import { CategoriesResponse } from "@/types/categories";
-import { useDeleteCategory, useUpdateCategory } from "@/hooks/useCategories";
+import { BlogResponse } from "@/types/blog";
+import { useDeleteBlog, useUpdateBlog } from "@/hooks/useBlog";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -29,17 +29,26 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const columns: ColumnDef<CategoriesResponse>[] = [
+export const columns: ColumnDef<BlogResponse>[] = [
   {
     id: "index",
     header: ({ column }) => <DataTableColumnHeader column={column} title="#" />,
     cell: ({ row }) => <>{row.index + 1}</>,
   },
   {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <span className="capitalize">{row.getValue("name")}</span>,
+    accessorKey: "title",
+    header: "Title",
+    cell: ({ row }) => (
+      <div className="flex flex-row items-center gap-2">
+        <Avatar className="h-auto w-8 rounded-lg">
+          <AvatarImage src={row.original.featuredImage.url} alt={row.original.title} />
+          <AvatarFallback className="rounded-lg">{row.original.title.slice(0, 1)}</AvatarFallback>
+        </Avatar>
+        <span>{row.original.title}</span>
+      </div>
+    ),
   },
   {
     accessorKey: "isPublished",
@@ -90,9 +99,9 @@ export const columns: ColumnDef<CategoriesResponse>[] = [
   },
 ];
 
-const Cell = ({ data }: { data: CategoriesResponse }) => {
-  const { mutate, isPending } = useDeleteCategory();
-  const { mutate: publishMutate, isPending: publishIsPending } = useUpdateCategory();
+const Cell = ({ data }: { data: BlogResponse }) => {
+  const { mutate, isPending } = useDeleteBlog();
+  const { mutate: publishMutate, isPending: publishIsPending } = useUpdateBlog();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isPublishAlertOpen, setPublishAlertOpen] = useState(false);
 
@@ -112,7 +121,7 @@ const Cell = ({ data }: { data: CategoriesResponse }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <Link href={`/blog-categories/update/${data.id}`} className="flex items-center">
+            <Link href={`/blog-blog/update/${data.id}`} className="flex items-center">
               <Pencil className="mr-2 h-4 w-4" />
               Update
             </Link>
