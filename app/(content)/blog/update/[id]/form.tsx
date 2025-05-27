@@ -39,12 +39,15 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { useGetAllCategories } from "@/hooks/useCategories";
+import { useGetAllMedia } from "@/hooks/useMedia";
+import Image from "next/image";
 
 const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
 export default function DataFrom({ id }: { id: string }) {
   const { mutate, isPending } = useUpdateBlog();
   const { data: categories } = useGetAllCategories();
+  const { data: media } = useGetAllMedia({ type: JSON.stringify(["image"]) });
   const { data } = useGetBlogById(id);
 
   const form = useForm<z.infer<typeof updateBlogSchema>>({
@@ -105,20 +108,21 @@ export default function DataFrom({ id }: { id: string }) {
                         <AlertDialogCancel className="text-muted-foreground">Esc</AlertDialogCancel>
                       </AlertDialogHeader>
 
-                      {/* Replace this with your actual image selector */}
                       <div className="grid grid-cols-4 gap-4 p-4">
-                        {["image1.jpg", "image2.jpg", "image3.jpg"].map((img) => (
+                        {media?.result.data.data.map((img) => (
                           <button
-                            key={img}
+                            key={img.id}
                             onClick={() => {
-                              field.onChange(img);
+                              field.onChange(img.id);
                             }}
                             className="border p-2 hover:bg-accent"
                           >
-                            <img
-                              src={`/images/${img}`}
-                              alt={img}
-                              className="w-full h-24 object-cover"
+                            <Image
+                              src={img.url}
+                              alt={img.id}
+                              width={150}
+                              height={150}
+                              className="w-full h-auto object-cover"
                             />
                           </button>
                         ))}

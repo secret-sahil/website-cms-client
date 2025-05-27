@@ -29,7 +29,7 @@ export const updateBlogSchema = object({
     .trim(),
   description: string().min(30, { message: "Description is too short." }).nonempty(),
   content: string().min(200, { message: "Content is too short." }).nonempty(),
-  featuredImageId: string().url(),
+  featuredImageId: string().uuid(),
   categoryIds: string().uuid().array().min(1, { message: "At least one category is required." }),
   tags: string().array(),
   isPublished: boolean(),

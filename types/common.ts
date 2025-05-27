@@ -35,3 +35,11 @@ export interface ApiErrorResponse {
     raw: any;
   };
 }
+
+export type MediaType = "image" | "video" | "gif" | "audio" | "pdf" | "other";
+
+export type ApplicationStatus = "applied" | "in_review" | "hired" | "rejected";
+
+export type Wheredidyouhear = "friend" | "social_media" | "website" | "job_portal" | "other";
+
+export type RoleEnumType = "sales" | "content" | "hr" | "admin";
