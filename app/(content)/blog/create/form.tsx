@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -16,6 +18,10 @@ import {
 import { useCreateBlog } from "@/hooks/useBlog";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
 export default function DataFrom() {
   const { mutate, isPending } = useCreateBlog();
@@ -67,6 +73,21 @@ export default function DataFrom() {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Blog Content</FormLabel>
+              <FormControl>
+                <Suspense fallback={<p className="text-black">Loading...</p>}>
+                  <Editor {...field} onChange={(e) => form.setValue("content", e)} />
+                </Suspense>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button disabled={isPending} type="submit">
           {isPending ? <Loader2 className="animate-spin" /> : "Submit"}
         </Button>

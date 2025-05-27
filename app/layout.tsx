@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import "@mdxeditor/editor/style.css";
 import ReactQueryProvider from "./reactQueryProvider";
 import { Toaster } from "react-hot-toast";
 
