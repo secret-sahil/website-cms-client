@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
+      - run: npm ci -f
       - run: |
           touch .env
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
