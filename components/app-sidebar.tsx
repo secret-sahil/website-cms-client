@@ -1,7 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { Rss, GalleryVerticalEnd, ChartBarStacked, House, Store, Wallet } from "lucide-react";
+import {
+  Rss,
+  GalleryVerticalEnd,
+  ChartBarStacked,
+  House,
+  LaptopMinimalCheck,
+  BriefcaseBusiness,
+  FileUser,
+  User,
+  Building,
+  Workflow,
+} from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
 import {
@@ -37,17 +48,40 @@ const data = {
 
   sales: [
     {
-      name: "Inventory",
-      url: "/inventory",
-      icon: Store,
+      name: "Leads",
+      url: "/leads",
+      icon: LaptopMinimalCheck,
     },
   ],
 
   hr: [
     {
-      name: "Purchase Order",
-      url: "/purchase-order",
-      icon: Wallet,
+      name: "Job Openings",
+      url: "/jobs",
+      icon: BriefcaseBusiness,
+    },
+    {
+      name: "Job Applications",
+      url: "/applications",
+      icon: FileUser,
+    },
+  ],
+
+  admin: [
+    {
+      name: "Users",
+      url: "/users",
+      icon: User,
+    },
+    {
+      name: "Offices",
+      url: "/offices",
+      icon: Building,
+    },
+    {
+      name: "Integrations",
+      url: "/integrations",
+      icon: Workflow,
     },
   ],
 };
@@ -91,6 +125,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain title="Content" projects={data.content} />
         <NavMain title="Sales" projects={data.sales} />
         <NavMain title="Human Resources" projects={data.hr} />
+        <NavMain title="Admin" projects={data.admin} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user?.result.data} />
