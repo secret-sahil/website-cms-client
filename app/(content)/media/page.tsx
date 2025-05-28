@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useCreateMedia, useDeleteMedia, useGetAllMedia, useUpdateMedia } from "@/hooks/useMedia";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Ban, MoreVertical, Replace, Upload } from "lucide-react";
+import { Ban, Copy, Loader2, MoreVertical, Replace, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -13,18 +13,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Page() {
   const { data } = useGetAllMedia();
   const media = data?.result?.data?.data ?? [];
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const { mutate: uploadFile } = useCreateMedia();
   const { mutate: updateFile } = useUpdateMedia();
-  const { mutate: deleteFile } = useDeleteMedia();
+  const { mutate: deleteFile, isPending } = useDeleteMedia();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -54,13 +67,9 @@ export default function Page() {
     }
   };
 
-  const handleDelete = (id: string) => {
-    deleteFile(id);
-  };
-
   useEffect(() => {
     document.body.style.pointerEvents = "";
-  }, [uploadDialogOpen]);
+  }, [uploadDialogOpen, isAlertOpen]);
 
   return (
     <AdminLayout
@@ -84,6 +93,9 @@ export default function Page() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => navigator.clipboard.writeText(item.url)}>
+                      <Copy /> Copy Url
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => {
                         setReplaceTargetId(item.id);
@@ -93,7 +105,13 @@ export default function Page() {
                       <Replace /> Replace
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => handleDelete(item.id)} asChild>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setDeleteId(item.id);
+                        setIsAlertOpen(true);
+                      }}
+                      asChild
+                    >
                       <Button variant="destructive" className="w-full justify-start">
                         <Ban /> Delete
                       </Button>
@@ -106,7 +124,7 @@ export default function Page() {
                 height={400}
                 src={item.url}
                 alt={item.name}
-                className="w-full h-auto rounded-sm"
+                className="w-full h-48 object-cover rounded-sm"
               />
             </div>
           ))}
@@ -142,7 +160,32 @@ export default function Page() {
           </DialogContent>
         </Dialog>
 
-        {/* Upload FAB Button */}
+        {/* Delete Alert Dialog */}
+        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    deleteFile(deleteId ?? "");
+                    setIsAlertOpen(false);
+                  }}
+                  className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
+                  disabled={isPending}
+                >
+                  {isPending ? <Loader2 className="animate-spin" /> : "Continue"}
+                </Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         <Button
           onClick={() => {
             setReplaceTargetId(null);

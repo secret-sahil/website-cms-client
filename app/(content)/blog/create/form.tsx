@@ -46,7 +46,7 @@ const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
 export default function DataFrom() {
   const { data: categories } = useGetAllCategories();
-  const { data: media } = useGetAllMedia({ type: JSON.stringify(["image"]) });
+  const { data: media } = useGetAllMedia({ type: JSON.stringify(["image", "gif"]) });
   const { mutate, isPending } = useCreateBlog();
   const form = useForm<z.infer<typeof createBlogSchema>>({
     resolver: zodResolver(createBlogSchema),
