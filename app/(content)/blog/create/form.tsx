@@ -98,11 +98,9 @@ export default function DataFrom() {
                     </AlertDialogTrigger>
                     <AlertDialogContent className="max-w-7xl">
                       <AlertDialogHeader className="flex flex-row justify-between items-center">
-                        <AlertDialogTitle>Select required from below batches.</AlertDialogTitle>
+                        <AlertDialogTitle>Select featured image.</AlertDialogTitle>
                         <AlertDialogCancel className="text-muted-foreground">Esc</AlertDialogCancel>
                       </AlertDialogHeader>
-
-                      {/* Replace this with your actual image selector */}
                       <div className="grid grid-cols-4 gap-4 p-4">
                         {media?.result.data.data.map((img) => (
                           <button
@@ -110,14 +108,17 @@ export default function DataFrom() {
                             onClick={() => {
                               field.onChange(img.id);
                             }}
-                            className="border p-2 hover:bg-accent"
+                            className={cn(
+                              "border-2 rounded-xl p-1 hover:bg-accent",
+                              form.watch("featuredImageId") === img.id ? "border-blue-500" : ""
+                            )}
                           >
                             <Image
                               src={img.url}
                               alt={img.id}
                               width={150}
                               height={150}
-                              className="w-full h-auto object-cover"
+                              className="w-full rounded-lg h-48 object-cover"
                             />
                           </button>
                         ))}
