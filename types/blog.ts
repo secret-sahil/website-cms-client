@@ -55,7 +55,6 @@ export interface BlogResponse {
   tags: string[];
   authorId: string;
   isPublished: false;
-  isFeatured: false;
   isDeleted: false;
   createdBy: string;
   updatedBy: string;
