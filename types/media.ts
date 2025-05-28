@@ -1,8 +1,9 @@
-import { number, object, string, TypeOf } from "zod";
+import { any, number, object, string, TypeOf } from "zod";
 import { MediaType } from "./common";
 
 export const updateMediaSchema = object({
   id: string({ required_error: "Id is required." }).uuid(),
+  file: any({ required_error: "File is required." }),
 }).partial();
 
 export const getMediaSchema = object({

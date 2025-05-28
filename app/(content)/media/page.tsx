@@ -1,7 +1,7 @@
 "use client";
 import AdminLayout from "@/components/layout/admin/page";
 import React, { useEffect, useRef, useState } from "react";
-import { useGetAllMedia } from "@/hooks/useMedia";
+import { useCreateMedia, useDeleteMedia, useGetAllMedia, useUpdateMedia } from "@/hooks/useMedia";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Ban, MoreVertical, Replace, Upload } from "lucide-react";
@@ -22,14 +22,19 @@ export default function Page() {
   const [dragOver, setDragOver] = useState(false);
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { mutate: uploadFile } = useCreateMedia();
+  const { mutate: updateFile } = useUpdateMedia();
+  const { mutate: deleteFile } = useDeleteMedia();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const action = replaceTargetId ? "Replaced" : "Uploaded";
-    alert(`${action} ${file.name} for ID: ${replaceTargetId || "new"}`);
-
+    if (replaceTargetId) {
+      updateFile({ file, id: replaceTargetId });
+    } else {
+      uploadFile(file);
+    }
     setUploadDialogOpen(false);
     setReplaceTargetId(null);
   };
@@ -39,15 +44,18 @@ export default function Page() {
     setDragOver(false);
     const file = e.dataTransfer.files?.[0];
     if (file) {
-      const action = replaceTargetId ? "Replaced" : "Uploaded";
-      alert(`${action} ${file.name} for ID: ${replaceTargetId || "new"}`);
+      if (replaceTargetId) {
+        updateFile({ file, id: replaceTargetId });
+      } else {
+        uploadFile(file);
+      }
       setUploadDialogOpen(false);
       setReplaceTargetId(null);
     }
   };
 
   const handleDelete = (id: string) => {
-    alert(`Deleted media with ID: ${id}`);
+    deleteFile(id);
   };
 
   useEffect(() => {

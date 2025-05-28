@@ -1,18 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { ApiErrorResponse, ApiResponse, ApiResponseWithPagination } from "@/types/common";
 import Notify from "@/lib/notification";
-import { MediaResponse, updateMediaInput, getMediaInput } from "@/types/media";
+import { MediaResponse, getMediaInput, updateMediaInput } from "@/types/media";
 import Media from "@/api/media";
 
 export const useCreateMedia = () => {
-  const router = useRouter();
-
-  return useMutation<ApiResponse<any>, ApiErrorResponse>({
+  const queryClient = useQueryClient();
+  return useMutation<ApiResponse<any>, ApiErrorResponse, File>({
     mutationFn: Media.create,
     onSuccess: () => {
-      router.push("/media");
-      Notify.success("Created successfully.");
+      queryClient.invalidateQueries({ queryKey: ["media"] });
+      Notify.success("Uploaded successfully.");
     },
     onError: (error) => {
       Notify.error(error.result.error);
@@ -29,13 +27,11 @@ export const useGetAllMedia = (data?: getMediaInput) => {
 
 export const useUpdateMedia = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation<ApiResponse<any>, ApiErrorResponse, updateMediaInput>({
     mutationFn: Media.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["media"] });
-      router.push("/media");
       Notify.success("Updated successfully.");
     },
     onError: (error) => {
