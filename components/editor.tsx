@@ -1,14 +1,39 @@
 import React, { useRef } from "react";
 import { Editor as TinyMCEEditor } from "@tinymce/tinymce-react";
+import { useMutation } from "@tanstack/react-query";
+import { ApiErrorResponse, ApiResponse } from "@/types/common";
+import Media from "@/api/media";
+import Notify from "@/lib/notification";
 
 interface Props {
   initialValue?: string;
   onChange: (content: string) => void;
 }
 
+interface UpladResponse {
+  image: string;
+  name: string;
+}
+
 const Editor: React.FC<Props> = ({ initialValue = "", onChange }) => {
   const editorRef = useRef<any>(null);
-
+  const image = useRef<string>("");
+  const name = useRef<string>("");
+  const { mutateAsync: uploadFile } = useMutation<
+    ApiResponse<UpladResponse>,
+    ApiErrorResponse,
+    File
+  >({
+    mutationFn: Media.create,
+    onSuccess: (data) => {
+      image.current = data.result.data.image;
+      name.current = data.result.data.name;
+      console.log(data.result.data.image);
+    },
+    onError: (error) => {
+      Notify.error(error.result.error);
+    },
+  });
   const handleEditorChange = (content: string) => {
     onChange(content);
   };
@@ -57,21 +82,14 @@ const Editor: React.FC<Props> = ({ initialValue = "", onChange }) => {
           if (meta.filetype === "image") {
             const input = document.createElement("input");
             input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-            // don't remove this line, it is important for the file picker to work
-            console.log(value, "value");
-            input.onchange = function () {
+            input.setAttribute("accept", "image/*,image/gif");
+            input.onchange = async function () {
               const file = (this as HTMLInputElement).files?.[0];
               if (file) {
-                const reader = new FileReader();
-                reader.onload = function () {
-                  const base64 = reader.result as string;
-                  callback(base64, { title: file.name }); // insert base64 image
-                };
-                reader.readAsDataURL(file);
+                await uploadFile(file);
+                callback(image.current, { title: name.current });
               }
             };
-
             input.click();
           }
         },
