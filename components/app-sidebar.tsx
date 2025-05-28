@@ -44,6 +44,11 @@ const data = {
       url: "/blog-categories",
       icon: ChartBarStacked,
     },
+    {
+      name: "Media",
+      url: "/media",
+      icon: GalleryVerticalEnd,
+    },
   ],
 
   sales: [

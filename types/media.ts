@@ -17,6 +17,7 @@ export type getMediaInput = TypeOf<typeof getMediaSchema>;
 export interface MediaResponse {
   id: string;
   url: string;
+  name: string;
   type: MediaType;
   createdBy: string;
   updatedBy: string;
