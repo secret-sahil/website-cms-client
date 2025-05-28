@@ -279,7 +279,7 @@ export default function DataFrom() {
               <FormLabel>Blog Content</FormLabel>
               <FormControl>
                 <Suspense fallback={<p className="text-black">Loading...</p>}>
-                  <Editor {...field} onChange={(e) => form.setValue("content", e)} />
+                  <Editor {...field} onChange={(content) => field.onChange(content)} />
                 </Suspense>
               </FormControl>
               <FormMessage />

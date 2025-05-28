@@ -288,9 +288,9 @@ export default function DataFrom({ id }: { id: string }) {
               <FormControl>
                 <Suspense fallback={<p className="text-black">Loading...</p>}>
                   <Editor
-                    initialValue={field.value}
                     {...field}
-                    onChange={(e) => form.setValue("content", e)}
+                    initialValue={data?.result.data.content || ""}
+                    onChange={(content) => field.onChange(content)}
                   />
                 </Suspense>
               </FormControl>
