@@ -107,7 +107,7 @@ export default function DataFrom({ id }: { id: string }) {
                         <AlertDialogTitle>Select featured image.</AlertDialogTitle>
                         <AlertDialogCancel className="text-muted-foreground">Esc</AlertDialogCancel>
                       </AlertDialogHeader>
-                      <div className="grid grid-cols-4 gap-4 p-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 max-h-[70vh] overflow-y-auto">
                         {media?.result.data.data.map((img) => (
                           <button
                             key={img.id}
