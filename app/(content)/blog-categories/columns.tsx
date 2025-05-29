@@ -78,8 +78,8 @@ export const columns: ColumnDef<CategoriesResponse>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" />,
     cell: ({ row }) => (
       <span className="flex flex-row items-center gap-x-1">
-        {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}/
-        {format(new Date(row.getValue("createdAt")), "hh:mm a")}
+        {format(new Date(row.getValue("updatedAt")), "yyyy-MM-dd")}/
+        {format(new Date(row.getValue("updatedAt")), "hh:mm a")}
       </span>
     ),
   },

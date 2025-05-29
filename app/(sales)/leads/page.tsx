@@ -3,10 +3,10 @@ import AdminLayout from "@/components/layout/admin/page";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import React from "react";
-import { useGetAllBlog } from "@/hooks/useBlog";
+import { useGetAllLead } from "@/hooks/useLead";
 
 export default function Page() {
-  const { data } = useGetAllBlog();
+  const { data } = useGetAllLead();
   return (
     <AdminLayout
       breadcrumbs={[

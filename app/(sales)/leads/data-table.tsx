@@ -26,7 +26,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { DataTablePagination } from "@/components/data-table-pagination";
 import ColumnDropdown from "@/components/column-view-handler";
-import { CheckCheck } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -70,9 +69,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </div>
         <div className="space-x-2">
           <ColumnDropdown table={table} storageKey={"blog"} />
-          <Button>
-            <CheckCheck /> Mark all as read
-          </Button>
         </div>
       </div>
       <div className="rounded-md border">

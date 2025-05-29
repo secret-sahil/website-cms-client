@@ -1,90 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Ban, Check, Loader2, MoreHorizontal, Pencil, X } from "lucide-react";
-import { BlogResponse } from "@/types/blog";
-import { useDeleteBlog, useUpdateBlog } from "@/hooks/useBlog";
-import Link from "next/link";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { Copy, Dot, MoveRight } from "lucide-react";
+import { LeadResponse } from "@/types/lead";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import toast from "react-hot-toast";
+import { useMarkLeadAsRead } from "@/hooks/useLead";
 
-export const columns: ColumnDef<BlogResponse>[] = [
+export const columns: ColumnDef<LeadResponse>[] = [
   {
     id: "index",
     header: ({ column }) => <DataTableColumnHeader column={column} title="#" />,
-    cell: ({ row }) => <>{row.index + 1}</>,
+    cell: ({ row }) => <span>{row.index + 1}</span>,
   },
   {
-    accessorKey: "title",
-    header: "Title",
-    cell: ({ row }) => (
-      <div className="flex flex-row items-center gap-2">
-        <Avatar className="h-auto w-8 rounded-lg">
-          <AvatarImage src={row.original.featuredImage.url} alt={row.original.title} />
-          <AvatarFallback className="rounded-lg">{row.original.title.slice(0, 1)}</AvatarFallback>
-        </Avatar>
-        <span>{row.original.title}</span>
-      </div>
-    ),
+    accessorKey: "fullName",
+    header: "Full Name",
+    cell: ({ row }) => <span className="capitalize">{row.getValue("fullName")}</span>,
   },
-  {
-    accessorKey: "isPublished",
-    header: "Published",
-    cell: ({ row }) => (
-      <span
-        className={cn(
-          "text-white px-1 rounded-md",
-          row.original.isPublished ? "bg-green-500" : "bg-red-500"
-        )}
-      >
-        {row.original.isPublished ? "Yes" : "No"}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "createdBy",
-    header: "Created By",
-  },
+
   {
     accessorKey: "updatedBy",
-    header: "Updated By",
-  },
-  {
-    accessorKey: "createdAt",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
-    cell: ({ row }) => (
-      <span className="flex flex-row items-center gap-x-1">
-        {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}/
-        {format(new Date(row.getValue("createdAt")), "hh:mm a")}
-      </span>
-    ),
+    header: "Last Opened By",
   },
   {
     accessorKey: "updatedAt",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Last Opened At" />,
+    cell: ({ row }) => (
+      <span className="flex flex-row items-center gap-x-1">
+        {format(new Date(row.getValue("updatedAt")), "yyyy-MM-dd")}/
+        {format(new Date(row.getValue("updatedAt")), "hh:mm a")}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Submitted At" />,
     cell: ({ row }) => (
       <span className="flex flex-row items-center gap-x-1">
         {format(new Date(row.getValue("createdAt")), "yyyy-MM-dd")}/
@@ -99,117 +55,64 @@ export const columns: ColumnDef<BlogResponse>[] = [
   },
 ];
 
-const Cell = ({ data }: { data: BlogResponse }) => {
-  const { mutate, isPending } = useDeleteBlog();
-  const { mutate: publishMutate, isPending: publishIsPending } = useUpdateBlog();
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [isPublishAlertOpen, setPublishAlertOpen] = useState(false);
-
-  useEffect(() => {
-    document.body.style.pointerEvents = "";
-  }, [isAlertOpen, isPublishAlertOpen]);
-
+const Cell = ({ data }: { data: LeadResponse }) => {
+  const lead = data;
+  const { mutate } = useMarkLeadAsRead();
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem asChild>
-            <Link href={`/blog/update/${data.id}`} className="flex items-center">
-              <Pencil className="mr-2 h-4 w-4" />
-              Update
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="mb-1" asChild>
-            <Button
-              variant={data.isPublished ? "destructive" : "success"}
-              className="w-full justify-start"
-              onClick={() => setPublishAlertOpen(true)}
-            >
-              {data.isPublished ? (
-                <X className="mr-2 h-4 w-4" />
-              ) : (
-                <Check className="mr-2 h-4 w-4" />
-              )}
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button onClick={() => mutate({ id: lead.id, isOpened: true })} className="relative">
+          {!lead.isOpened && (
+            <Dot className="absolute stroke-[10px] -right-1.5 -top-1.5 text-yellow-500" />
+          )}
+          Open <MoveRight className="ml-2" size={18} />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl rounded-2xl p-6">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold mb-2">Lead Details</DialogTitle>
+          <p className="text-sm text-muted-foreground border border-border rounded-lg w-fit px-2">
+            Submitted on {new Date(lead.createdAt).toLocaleString()}
+          </p>
+        </DialogHeader>
 
-              {data.isPublished ? "Unpublish" : "Publish"}
-            </Button>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Button
-              variant="destructive"
-              className="w-full justify-start"
-              onClick={() => setIsAlertOpen(true)}
-            >
-              <Ban className="mr-2 h-4 w-4" />
-              Delete
-            </Button>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* Delete Alert Dialog */}
-      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button
-                variant="destructive"
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-sm">
+          <Detail label="Full Name" value={lead.fullName} />
+          <div>
+            <p className="text-xs text-muted-foreground">Email</p>
+            <p className="font-medium">
+              <Copy
                 onClick={() => {
-                  mutate(data.id);
-                  setIsAlertOpen(false);
+                  navigator.clipboard.writeText(lead.email);
+                  toast.success("Email copied to clipboard!");
                 }}
-                className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
-                disabled={isPending}
-              >
-                {isPending ? <Loader2 className="animate-spin" /> : "Continue"}
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+                className=" inline-block size-3 cursor-pointer mr-1"
+              />
+              {lead.email}
+            </p>
+          </div>
+          <Detail label="Phone" value={lead.phone} />
+          <Detail label="Job Title" value={lead.jobTitle} />
+          <Detail label="Company" value={lead.company} />
+          <Detail label="Company Size" value={lead.companySize} />
+          <Detail label="Budget" value={lead.budget ? `$${lead.budget.toLocaleString()}` : "-"} />
+          <Detail label="Source" value={lead.source} />
+        </div>
 
-      {/* Publish Alert Dialog */}
-      <AlertDialog open={isPublishAlertOpen} onOpenChange={setPublishAlertOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              {data.isPublished
-                ? "This will unpublish it and make it invisible across the entire website."
-                : "This will make it public and visible across the entire website."}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  publishMutate({ id: data.id, isPublished: !data.isPublished });
-                  setIsAlertOpen(false);
-                }}
-                className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
-                disabled={publishIsPending}
-              >
-                {publishIsPending ? <Loader2 className="animate-spin" /> : "Continue"}
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+        {lead.message && (
+          <div className="mt-0">
+            <h4 className="text-sm font-medium">Message</h4>
+            <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{lead.message}</p>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
+
+const Detail = ({ label, value }: { label: string; value?: string }) => (
+  <div>
+    <p className="text-xs text-muted-foreground">{label}</p>
+    <p className="font-medium">{value || "-"}</p>
+  </div>
+);
