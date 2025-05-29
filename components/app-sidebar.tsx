@@ -93,6 +93,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: user } = useGetUser();
+  const userData = user?.result.data;
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -106,7 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">{env.NEXT_PUBLIC_APP_NAME}</span>
                   <span className="capitalize border border-border rounded-md px-1 w-fit">
-                    {user?.result.data.role}
+                    {userData?.role}
                   </span>
                 </div>
               </a>
@@ -127,10 +128,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <NavMain title="Content" projects={data.content} />
-        <NavMain title="Sales" projects={data.sales} />
-        <NavMain title="Human Resources" projects={data.hr} />
-        <NavMain title="Admin" projects={data.admin} />
+        {hasAccess(userData?.role, "content") && (
+          <NavMain title="Content" projects={data.content} />
+        )}
+        {hasAccess(userData?.role, "sales") && <NavMain title="Sales" projects={data.sales} />}
+
+        {hasAccess(userData?.role, "hr") && <NavMain title="Human Resources" projects={data.hr} />}
+
+        {hasAccess(userData?.role, "admin") && <NavMain title="Admin" projects={data.admin} />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user?.result.data} />
@@ -138,4 +143,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarRail />
     </Sidebar>
   );
+}
+
+function hasAccess(userRole: string | undefined, targetRole: string): boolean {
+  if (!userRole) return false;
+  if (userRole === "admin") return true;
+  return userRole === targetRole;
 }
