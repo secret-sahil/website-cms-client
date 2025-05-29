@@ -121,7 +121,7 @@ const Cell = ({ data }: { data: BlogResponse }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <Link href={`/blog/update/${data.id}`} className="flex items-center">
+            <Link href={`/blog/update/${data?.id}`} className="flex items-center">
               <Pencil className="mr-2 h-4 w-4" />
               Update
             </Link>
@@ -129,7 +129,7 @@ const Cell = ({ data }: { data: BlogResponse }) => {
           <DropdownMenuSeparator />
           <DropdownMenuItem className="mb-1" asChild>
             <Button
-              variant={data.isPublished ? "destructive" : "success"}
+              variant={data?.isPublished ? "destructive" : "success"}
               className="w-full justify-start"
               onClick={() => setPublishAlertOpen(true)}
             >
@@ -198,7 +198,7 @@ const Cell = ({ data }: { data: BlogResponse }) => {
               <Button
                 variant="destructive"
                 onClick={() => {
-                  publishMutate({ id: data.id, isPublished: !data.isPublished });
+                  publishMutate({ id: data?.id, isPublished: !data?.isPublished });
                   setIsAlertOpen(false);
                 }}
                 className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
