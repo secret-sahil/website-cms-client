@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import React from "react";
 import { Loader2 } from "lucide-react";
 import { useLogin } from "@/hooks/useAuth";
@@ -48,15 +47,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   />
                 </div>
                 <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <Link
-                      href="/forgot-password"
-                      className="ml-auto text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot your password?
-                    </Link>
-                  </div>
+                  <Label htmlFor="password">Password</Label>
                   <Input
                     ref={passwordRef}
                     id="password"
@@ -79,7 +70,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         </CardContent>
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        &copy; 2021 {env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
+        &copy; {new Date().getFullYear()} {env.NEXT_PUBLIC_APP_NAME} | All rights reserved.
       </div>
     </div>
   );
