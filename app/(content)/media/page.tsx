@@ -127,7 +127,7 @@ export default function Page() {
                 className="w-full h-48 object-cover rounded-sm"
               />
               <div className="flex flex-col mt-2">
-                {item.blogs.length > 0 && <p className="text-xs">Used in</p>}
+                {item.blogs.length > 0 && <p className="text-xs">Used as featured image in:</p>}
                 {item.blogs.map((blog) => (
                   <p key={blog.id} className="rounded-lg underline text-xs font-medium truncate">
                     {blog.title}
