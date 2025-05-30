@@ -83,7 +83,7 @@ export default function Page() {
       <div className="relative p-4">
         <div className="grid select-none grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {media.map((item) => (
-            <div key={item.id} className="relative bg-slate-100 rounded-lg px-3 pb-5">
+            <div key={item.id} className="relative bg-slate-100 rounded-lg px-3 pb-2">
               <div className="p-2 flex justify-between items-center">
                 <h3 className="text-sm font-medium truncate">{item.name}</h3>
                 <DropdownMenu>
@@ -126,6 +126,14 @@ export default function Page() {
                 alt={item.name}
                 className="w-full h-48 object-cover rounded-sm"
               />
+              <div className="flex flex-col mt-2">
+                {item.blogs.length > 0 && <p className="text-xs">Used in</p>}
+                {item.blogs.map((blog) => (
+                  <p key={blog.id} className="rounded-lg underline text-xs font-medium truncate">
+                    {blog.title}
+                  </p>
+                ))}
+              </div>
             </div>
           ))}
         </div>

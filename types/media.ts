@@ -20,6 +20,10 @@ export interface MediaResponse {
   url: string;
   name: string;
   type: MediaType;
+  blogs: {
+    id: string;
+    title: string;
+  }[];
   createdBy: string;
   updatedBy: string;
   createdAt: string;
