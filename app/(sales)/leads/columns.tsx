@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import toast from "react-hot-toast";
 import { useMarkLeadAsRead } from "@/hooks/useLead";
+import { decrypt } from "@/lib/utils";
 
 export const columns: ColumnDef<LeadResponse>[] = [
   {
@@ -83,17 +84,17 @@ const Cell = ({ data }: { data: LeadResponse }) => {
             <p className="font-medium">
               <Copy
                 onClick={() => {
-                  navigator.clipboard.writeText(lead.email);
+                  navigator.clipboard.writeText(decrypt(lead.email)!);
                   toast.success("Email copied to clipboard!");
                 }}
                 className=" inline-block size-3 cursor-pointer mr-1"
               />
-              {lead.email}
+              {decrypt(lead.email)}
             </p>
           </div>
-          <Detail label="Phone" value={lead.phone} />
+          <Detail label="Phone" value={decrypt(lead.phone)} />
           <Detail label="Job Title" value={lead.jobTitle} />
-          <Detail label="Company" value={lead.company} />
+          <Detail label="Company" value={decrypt(lead.company)} />
           <Detail label="Company Size" value={lead.companySize} />
           <Detail label="Budget" value={lead.budget ? `$${lead.budget.toLocaleString()}` : "-"} />
           <Detail label="Source" value={lead.source} />
@@ -102,7 +103,9 @@ const Cell = ({ data }: { data: LeadResponse }) => {
         {lead.message && (
           <div className="mt-0">
             <h4 className="text-sm font-medium">Message</h4>
-            <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{lead.message}</p>
+            <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">
+              {decrypt(lead.message)}
+            </p>
           </div>
         )}
       </DialogContent>
