@@ -8,6 +8,7 @@ import Notify from "@/lib/notification";
 interface Props {
   initialValue?: string;
   onChange: (content: string) => void;
+  menuBar?: boolean;
 }
 
 interface UpladResponse {
@@ -15,7 +16,7 @@ interface UpladResponse {
   name: string;
 }
 
-const Editor: React.FC<Props> = ({ initialValue = "", onChange }) => {
+const Editor: React.FC<Props> = ({ initialValue = "", onChange, menuBar = true }) => {
   const editorRef = useRef<any>(null);
   const image = useRef<string>("");
   const name = useRef<string>("");
@@ -47,7 +48,7 @@ const Editor: React.FC<Props> = ({ initialValue = "", onChange }) => {
       init={{
         base_url: "/tinymce",
         height: 500,
-        menubar: true,
+        menubar: menuBar,
         plugins: [
           "advlist",
           "autolink",

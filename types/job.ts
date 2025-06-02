@@ -39,7 +39,7 @@ export interface JobResponse {
   title: string;
   description: string;
   locationId: string;
-  experience: false;
+  experience: string;
   isPublished: false;
   createdBy: string;
   updatedBy: string;

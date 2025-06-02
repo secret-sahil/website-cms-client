@@ -111,7 +111,7 @@ const Cell = ({ data }: { data: JobResponse }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <Link href={`/job/update/${data?.id}`} className="flex items-center">
+            <Link href={`/jobs/update/${data?.id}`} className="flex items-center">
               <Pencil className="mr-2 h-4 w-4" />
               Update
             </Link>

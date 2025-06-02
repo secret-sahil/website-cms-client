@@ -7,12 +7,12 @@ export default function Page() {
     <AdminLayout
       breadcrumbs={[
         {
-          label: "Blog",
-          href: "/blog",
+          label: "Job Openings",
+          href: "/jobs",
         },
         {
-          label: "Create Blog",
-          href: "/blog/create",
+          label: "Create Job Opening",
+          href: "/jobs/create",
         },
       ]}
     >
