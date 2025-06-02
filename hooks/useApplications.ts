@@ -12,6 +12,7 @@ export const useGetAllApplications = (data?: getApplicationsInput) => {
   return useQuery<ApiResponseWithPagination<ApplicationsResponse[]>, ApiErrorResponse>({
     queryFn: () => Applications.read(data),
     queryKey: ["applications", data?.page, data?.limit, data?.search],
+    refetchOnWindowFocus: false,
   });
 };
 

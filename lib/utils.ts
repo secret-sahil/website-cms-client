@@ -22,7 +22,6 @@ export function decrypt(data?: string) {
   const decipher = crypto.createDecipheriv("aes-256-cbc", key, ivBuffer);
 
   let decrypted = decipher.update(encryptedText, "hex", "utf8");
-  console.log(decipher);
   decrypted += decipher.final("utf8");
   return decrypted;
 }
