@@ -49,4 +49,7 @@ export interface JobResponse {
     id: string;
     city: string;
   };
+  _count: {
+    application: number;
+  };
 }

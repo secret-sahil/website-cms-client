@@ -8,7 +8,6 @@ import {
   House,
   LaptopMinimalCheck,
   BriefcaseBusiness,
-  FileUser,
   User,
   Building,
   Workflow,
@@ -64,11 +63,6 @@ const data = {
       name: "Job Openings",
       url: "/jobs",
       icon: BriefcaseBusiness,
-    },
-    {
-      name: "Job Applications",
-      url: "/applications",
-      icon: FileUser,
     },
   ],
 

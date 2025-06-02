@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Ban, Check, Loader2, MoreHorizontal, Pencil, X } from "lucide-react";
+import { Ban, Check, Loader2, MoreHorizontal, MoveRight, Pencil, X } from "lucide-react";
 import { JobResponse } from "@/types/job";
 import { useDeleteJob, useUpdateJob } from "@/hooks/useJob";
 import Link from "next/link";
@@ -39,6 +39,14 @@ export const columns: ColumnDef<JobResponse>[] = [
   {
     accessorKey: "title",
     header: "Title",
+  },
+  {
+    accessorKey: "location.city",
+    header: "Location",
+  },
+  {
+    accessorKey: "experience",
+    header: "Experience",
   },
   {
     accessorKey: "isPublished",
@@ -83,6 +91,21 @@ export const columns: ColumnDef<JobResponse>[] = [
     ),
   },
   {
+    id: "applications",
+    header: "Applications",
+    cell: ({ row }) => (
+      <Link
+        href={`/jobs/applications/${row.original.id}?title=${row.original.title}`}
+        className="text-blue-500"
+      >
+        <Button variant={"ghost"}>
+          View Applications ({row.original._count.application})
+          <MoveRight />
+        </Button>
+      </Link>
+    ),
+  },
+  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => <Cell data={row.original} />,
@@ -100,7 +123,7 @@ const Cell = ({ data }: { data: JobResponse }) => {
   }, [isAlertOpen, isPublishAlertOpen]);
 
   return (
-    <>
+    <React.Fragment>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -200,6 +223,6 @@ const Cell = ({ data }: { data: JobResponse }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
+    </React.Fragment>
   );
 };
