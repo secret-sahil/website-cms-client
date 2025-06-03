@@ -42,20 +42,6 @@ export const columns: ColumnDef<CategoriesResponse>[] = [
     cell: ({ row }) => <span className="capitalize">{row.getValue("name")}</span>,
   },
   {
-    accessorKey: "isPublished",
-    header: "Published",
-    cell: ({ row }) => (
-      <span
-        className={cn(
-          "text-white px-1 rounded-md",
-          row.original.isPublished ? "bg-green-500" : "bg-red-500"
-        )}
-      >
-        {row.original.isPublished ? "Yes" : "No"}
-      </span>
-    ),
-  },
-  {
     accessorKey: "createdBy",
     header: "Created By",
   },
