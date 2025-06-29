@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${geistSans.className} antialiased dark`}>
         <Toaster position="bottom-center" />
         <ReactQueryProvider>
           <main>{children}</main>
