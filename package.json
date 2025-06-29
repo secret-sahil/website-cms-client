@@ -8,6 +8,7 @@
     "start": "next start -p 3366",
     "lint": "next lint",
     "lint-fix": "next lint --fix",
+    "vercel-build": "npm install --legacy-peer-deps && next build",
     "prepare": "husky"
   },
   "dependencies": {
