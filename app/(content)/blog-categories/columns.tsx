@@ -28,7 +28,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
-import { cn } from "@/lib/utils";
 
 export const columns: ColumnDef<CategoriesResponse>[] = [
   {
